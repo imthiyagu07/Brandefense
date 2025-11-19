@@ -5,6 +5,8 @@ import { connectDB } from "./config/db.js";
 
 import Mention from "./models/Mention.js";
 import ingestionRoutes from "./routes/ingestion.js";
+import { startSpikeMonitor } from "./alerts/spikeDetector.js";
+import alertRoutes from "./routes/alerts.js";
 
 dotenv.config();
 
@@ -12,9 +14,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/ingest", ingestionRoutes);
+app.use("/alerts", alertRoutes);
 
 // connect DB
 connectDB();
+
+// startSpikeMonitor();
 
 app.get("/", (req, res) => {
     res.json({message: "Brand Tracker API Running"});

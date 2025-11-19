@@ -6,6 +6,18 @@ export const saveMention = async ({ brand, text, source, url }) => {
         const sentiment = await analyzeSentiment(text);
         const embedding = await generateEmbedding(text);
 
+        if (!text || text.trim() === "") {
+        console.warn("⚠ Skipping NLP: empty text received");
+        return await Mention.create({
+            brand,
+            text: text || "",
+            source,
+            url,
+            sentiment: "neutral",
+            embedding: [],
+        });
+        }
+
         return await Mention.create({
             brand, 
             text, 
